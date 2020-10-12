@@ -1,4 +1,4 @@
-# hw-financial-planner
+# HW-financial-planner
 
 # Unit 5 - Financial Planning
 
