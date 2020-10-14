@@ -1,5 +1,16 @@
 # HW-financial-planner
 
+# Files in this repo 
+## Executables
+### main1_financial_planner.ipynb --> Personal Finance Planner + Monte Carlo 30 years 
+### main2_challenge.ipynb --> Optional Challenge - Early Retirement
+
+## References 
+### ref_financial_planner --> Only as a reference to comparate results 
+### ref_broken_main_financial_planner --> too large (just as a model to review with tutor)
+
+
+
 # Unit 5 - Financial Planning
 
 ![Financial Planner](Images/financial-planner.png)
