@@ -1,174 +1,20 @@
-# %%
-"""
-# Unit 5 - Financial Planning
-
-"""
-
-# %%
-# Initial imports
-import os
-import requests
-import json
-import pandas as pd
-from dotenv import load_dotenv
-import alpaca_trade_api as tradeapi
-from MCForecastTools import MCSimulation
-
-%matplotlib inline
-
-# %%
-# Load .env enviroment variables
-load_dotenv()
-
-# %%
-"""
-## Part 1 - Personal Finance Planner
-"""
-
-# %%
-"""
-### Collect Crypto Prices Using the `requests` Library
-"""
-
-# %%
-# Set current amount of crypto assets
-btc_qty = 1.2
-eth_qty = 5.3
-
-# %%
-# Crypto API URLs
-btc_url = "https://api.alternative.me/v2/ticker/Bitcoin/?convert=CAD"
-eth_url = "https://api.alternative.me/v2/ticker/Ethereum/?convert=CAD"
-
-# %%
-# BTC
-# Compute current value of my crpto
-response_data = requests.get(btc_url).json()
-#print(json.dumps(response_data, indent=4))
-btc_price = response_data['data']['1']['quotes']['USD']['price']
-
-# Compute current value of my crpto
-btc_value = round((btc_qty * btc_price),2)
 
 
-# %%
-# ETH
-## Fetch current price
-response_data = requests.get(eth_url).json()
-eth_price = response_data['data']['1027']['quotes']['USD']['price']
-
-# Compute current value of my crpto
-eth_value = round((eth_qty * eth_price),2)
-
-# %%
-# Print current crypto wallet balance
-print(f"The current value of your {btc_price} BTC is ${btc_value:0.2f}")
-print(f"The current value of your {eth_price} ETH is ${eth_value:0.2f}")
-
-# %%
-"""
-### Collect Investments Data Using Alpaca: `SPY` (stocks) and `AGG` (bonds)
-"""
-
-# %%
-# Current amount of stocks and bonds 
-spy_qty = 50
-agg_qty = 200 
-
-# %%
-# Set Alpaca API key and secret
-alpaca_api_key = os.getenv("GGC_ALPACA_API_KEY")
-alpaca_secret_key = os.getenv("GGC_ALPACA_SECRET_KEY")
-
-# Create the Alpaca API object
-alpaca = tradeapi.REST(
-    alpaca_api_key,
-    alpaca_secret_key,
-    api_version="v2"
-)
-
-# %%
-# Format current date as ISO format
-start_date = pd.Timestamp("2020-10-09", tz="America/New_York").isoformat()
-#start_date = pd.Timestamp.today(tz="America/New_York").isoformat()[0:10]    #[0:10] only date
-
-end_date = pd.Timestamp("2020-10-09", tz="America/New_York").isoformat()
-#end_date = pd.Timestamp.today(tz="America/New_York").isoformat()[0:10]      #[0:10] only date
 
 
-# Set the tickers
-tickers = ["AGG", "SPY"]
-
-# Set timeframe to '1D' 
-timeframe = "1D"
-
-# Get current closing prices for SPY and AGG
-df_tickers = alpaca.get_barset(
-    tickers,
-    timeframe,
-    start=start_date,
-    end=end_date
-).df
-
-# Preview DataFrame
-df_tickers.head()
 
 
-# %%
-# Pick AGG and SPY close prices
-agg_close_price = df_tickers['AGG']['close'][0]
-spy_close_price = df_tickers['SPY']['close'][0]
 
 
-# Print AGG and SPY close prices
-print(f"Current AGG closing price: ${agg_close_price}")
-print(f"Current SPY closing price: ${spy_close_price}")
 
-# %%
-# Compute the current value of shares
-spy_value = round((spy_qty * spy_close_price),2)
-agg_value = round((agg_qty * agg_close_price),2)
 
-# Print current value of share
-print(f"The current value of your {spy_qty} SPY shares is ${spy_value:0.2f}")
-print(f"The current value of your {agg_qty} AGG shares is ${agg_value:0.2f}")
 
-# %%
-"""
-### Savings Health Analysis
-"""
 
-# %%
-# Set monthly household income
-monthly_income = 12000 
 
-# Create savings DataFrame
-savings = {'amount': [(btc_value + eth_value), (spy_value + agg_value)]}
-df_savings = pd.DataFrame(savings, columns = ['amount'], index=['crypto','shares'])
 
-# Display savings DataFrame
-display(df_savings)
 
-# %%
-df_savings.plot.pie(y='amount', figsize=(5,5), title='Composition of Personal Savings')
 
-# %%
-# Set ideal emergency fund
-emergency_fund = monthly_income * 3
 
-# Calculate total amount of savings
-total_savings = float(df_savings.sum())
-
-# Validate saving health
-saving_healt = [
-    f'Congratulations! Your savings ${total_savings} are greater than your emergency fund ${emergency_fund}',
-    f'Congratulations! for reaching your goal. Savings ${total_savings} = emergency fund ${emergency_fund}',
-    f'Your are ${emergency_fund - total_savings} away from reaching the goal'
-    ]
-
-if total_savings > emergency_fund: display (saving_healt[0])
-elif total_savings == emergency_fund: display (saving_healt[1])
-else: display (saving_healt[2])
 
 
 # %%
