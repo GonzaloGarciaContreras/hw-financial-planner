@@ -2,12 +2,13 @@
 
 # Files in this repo 
 ## Executables
-### main1_financial_planner.ipynb --> Personal Finance Planner + Monte Carlo 30 years 
-### main2_challenge.ipynb --> Optional Challenge - Early Retirement
+### main1_financial_planned_and_challenge.ipynb
+### main1a_financial_planner.ipynb --> Personal Finance Planner + Monte Carlo 30 years 
+### main1b_challenge.ipynb --> Challenge - Early Retirement 5y & 10y 
 
 ## References 
 ### ref_financial_planner --> Only as a reference to comparate results 
-### ref_broken_main_financial_planner --> too large (just as a model to review with tutor)
+
 
 
 
